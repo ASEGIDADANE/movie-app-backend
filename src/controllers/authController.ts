@@ -12,7 +12,7 @@ const signup = async (req: Request, res: Response): Promise<void> => {
         const newuser = validatedUser
         await  registeruser(newuser, res)
         console.log(newuser)
-        res.status(201).json({ message: "User created successfully" });
+        // res.status(201).json({ message: "User created successfully" });
     }
     catch (error) {
         res.status(400).json({ message: "User not created" });

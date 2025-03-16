@@ -14,12 +14,16 @@ const registeruser = async (newuser: IRegisterUser, res: Response): Promise<void
     try {
         const { email, password } = newuser;
         if (!email || !password) {
+            res.status(400).json({ message: "Email and Password are required" });
             throw new Error("Email and Password are required");
+            
         }
 
         const existingUser = await User.findOne({ email: email }).exec();
         if (existingUser) {
+            res.status(400).json({ message: "User already exists" });
             throw new Error("User already exists");
+        
         }
 
         const hashPassword = await bcrypt.hash(password, 10);
@@ -35,6 +39,7 @@ const registeruser = async (newuser: IRegisterUser, res: Response): Promise<void
 
         const token = generateTokenAndSetCookie(user._id as string, res);
         await user.save();
+        console.log("User created successfully, token generated", token);
 
         res.status(201).json({ message: "User created successfully, token generated", token });
 
